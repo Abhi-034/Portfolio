@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Your Name - Dynamic Portfolio</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary-color: #4a90e2;
+        --secondary-color: #50c878;
+        --accent-color: #ff6b6b;
+        --background-color: #f0f4f8;
+        --text-color: #333;
+        --transition-speed: 0.3s;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Poppins", sans-serif;
+        line-height: 1.6;
+        color: var(--text-color);
+        background-color: var(--background-color);
+        transition: background-color var(--transition-speed) ease;
+      }
+
+      header {
+        background-color: var(--primary-color);
+        padding: 1rem;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: background-color var(--transition-speed) ease;
+      }
+
+      nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      .logo {
+        font-family: "Playfair Display", serif;
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .nav-links {
+        display: flex;
+        list-style: none;
+      }
+
+      .nav-links li {
+        margin-left: 1.5rem;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: white;
+        font-weight: 600;
+        transition: color var(--transition-speed) ease;
+        position: relative;
+      }
+
+      .nav-links a::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: -5px;
+        left: 0;
+        background-color: var(--accent-color);
+        transform: scaleX(0);
+        transition: transform var(--transition-speed) ease;
+      }
+
+      .nav-links a:hover::after {
+        transform: scaleX(1);
+      }
+
+      .burger {
+        display: none;
+        cursor: pointer;
+      }
+
+      .burger div {
+        width: 25px;
+        height: 3px;
+        background-color: white;
+        margin: 5px;
+        transition: all var(--transition-speed) ease;
+      }
+
+      main {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      section {
+        margin-bottom: 4rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.5s ease, transform 0.5s ease;
+      }
+
+      section.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      h1,
+      h2 {
+        font-family: "Playfair Display", serif;
+        margin-bottom: 1rem;
+        color: var(--primary-color);
+      }
+
+      .hero {
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        background: linear-gradient(
+          135deg,
+          var(--primary-color),
+          var(--secondary-color)
+        );
+        color: white;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><polygon fill="rgba(255,255,255,0.1)" points="0,100 100,0 100,100"/></svg>');
+        background-size: cover;
+      }
+
+      .hero h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1rem;
+        color: white;
+        animation: fadeInUp 1s ease-out;
+        position: relative;
+      }
+
+      .hero p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        animation: fadeInUp 1s ease-out 0.5s both;
+        position: relative;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .about {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+      }
+
+      .about-image {
+        flex: 1;
+        max-width: 300px;
+      }
+
+      .about-image img {
+        width: 100%;
+        height: auto;
+        border-radius: 50%;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform var(--transition-speed) ease;
+      }
+
+      .about-image img:hover {
+        transform: scale(1.05);
+      }
+
+      .about-content {
+        flex: 2;
+      }
+
+      .skills {
+        background-color: white;
+        padding: 3rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .skills h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+      }
+
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2rem;
+      }
+
+      .skill-category {
+        text-align: center;
+      }
+
+      .skill-category h3 {
+        color: var(--secondary-color);
+        margin-bottom: 1rem;
+      }
+
+      .skill-list {
+        list-style-type: none;
+      }
+
+      .skill-list li {
+        margin-bottom: 0.5rem;
+        position: relative;
+        padding-left: 20px;
+      }
+
+      .skill-list li::before {
+        content: "▹";
+        position: absolute;
+        left: 0;
+        color: var(--accent-color);
+      }
+
+      .project-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+      }
+
+      .project-card {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform var(--transition-speed) ease,
+          box-shadow var(--transition-speed) ease;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .project-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .project-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 5px;
+        margin-bottom: 1rem;
+      }
+
+      .project-card h3 {
+        color: var(--secondary-color);
+        margin-bottom: 0.5rem;
+      }
+
+      .project-card p {
+        flex-grow: 1;
+      }
+
+      .project-card .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+      }
+
+      .project-card .tag {
+        background-color: var(--accent-color);
+        color: white;
+        padding: 0.2rem 0.5rem;
+        border-radius: 20px;
+        font-size: 0.8rem;
+      }
+
+      .contact {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 3rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .contact h2 {
+        color: white;
+      }
+
+      form {
+        display: grid;
+        gap: 1rem;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 0.8rem;
+        border: none;
+        border-radius: 5px;
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+        transition: background-color var(--transition-speed) ease;
+      }
+
+      input::placeholder,
+      textarea::placeholder {
+        color: rgba(255, 255, 255, 0.7);
+      }
+
+      input:focus,
+      textarea:focus {
+        background-color: rgba(255, 255, 255, 0.2);
+        outline: none;
+      }
+
+      button {
+        background-color: var(--accent-color);
+        color: white;
+        padding: 0.8rem 1.5rem;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color var(--transition-speed) ease;
+        font-weight: 600;
+      }
+
+      button:hover {
+        background-color: var(--secondary-color);
+      }
+
+      footer {
+        background-color: var(--primary-color);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+      }
+
+      @media screen and (max-width: 768px) {
+        .nav-links {
+          position: fixed;
+          right: 0px;
+          height: 100vh;
+          top: 0;
+          background-color: var(--primary-color);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          width: 50%;
+          transform: translateX(100%);
+          transition: transform 0.5s ease-in;
+          justify-content: center;
+        }
+
+        .nav-links li {
+          opacity: 0;
+          margin: 1rem 0;
+        }
+
+        .burger {
+          display: block;
+        }
+
+        .about {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .about-image {
+          margin-bottom: 1rem;
+        }
+
+        .skills-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      .nav-active {
+        transform: translateX(0%);
+      }
+
+      @keyframes navLinkFade {
+        from {
+          opacity: 0;
+          transform: translateX(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0px);
+        }
+      }
+
+      .toggle .line1 {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+
+      .toggle .line2 {
+        opacity: 0;
+      }
+
+      .toggle .line3 {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
+      .sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border-width: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div class="logo">Abhilash Varanasi</div>
+        <ul class="nav-links">
+          <li><a href="#home">Home</a></li>
+          <li><a href="#about">About</a></li>
+          <li><a href="#skills">Skills</a></li>
+          <li><a href="#projects">Projects</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+        <div
+          class="burger"
+          aria-label="Toggle navigation menu"
+          aria-expanded="false"
+        >
+          <div class="line1"></div>
+          <div class="line2"></div>
+          <div class="line3"></div>
+        </div>
+      </nav>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <h1>Welcome to My Portfolio</h1>
+        <p>
+          I'm a passionate web developer creating stunning and functional
+          websites that leave a lasting impression.
+        </p>
+      </section>
+
+      <section id="about" class="about">
+        <div class="about-image">
+          <img src="/pfp.jpg" alt="Your Name" />
+        </div>
+        <div class="about-content">
+          <h2>About Me</h2>
+          <p>
+            Hello! I'm a creative and detail-oriented web developer with a
+            strong passion for building intuitive and visually appealing
+            websites. With expertise in HTML, CSS, JavaScript, and modern
+            frameworks, I love turning complex problems into simple, beautiful,
+            and intuitive designs.
+          </p>
+          <p>
+            When I'm not coding, you can find me exploring new technologies,
+            contributing to open-source projects, or enjoying a good book on
+            user experience design.
+          </p>
+        </div>
+      </section>
+
+      <section id="skills" class="skills">
+        <h2>My Skills</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3>Frontend</h3>
+            <ul class="skill-list">
+              <li>HTML5</li>
+              <li>CSS3</li>
+              <li>JavaScript</li>
+              <li>Responsive Design</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Backend</h3>
+            <ul class="skill-list">
+              <li>Node.js</li>
+              <li>Express.js</li>
+              <li>RESTful APIs</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Database</h3>
+            <ul class="skill-list">
+              <li>MongoDB</li>
+              <li>MySQL</li>
+            </ul>
+          </div>
+          <div class="skill-category">
+            <h3>Tools & Others</h3>
+            <ul class="skill-list">
+              <li>Git & GitHub</li>
+              <li>UI/UX Design</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="projects">
+        <h2>My Projects</h2>
+        <div class="project-grid">
+          <div class="project-card">
+            <img src="/1.png" alt="Project 1 screenshot" />
+            <h3>Certificate Generator</h3>
+            <p>
+              A fully responsive website with a focus on generating certificates
+              for students by the teachers.
+            </p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+
+              <span class="tag">JS</span>
+
+              <span class="tag">Node.js</span>
+              <span class="tag">Express.js</span>
+              <span class="tag">MongoDB</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <img src="/2.png" alt="Project 2 screenshot" />
+            <h3>Spotify Clone</h3>
+            <p>
+              A spotify clone with basic playback controls over the available
+              songs.
+            </p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JS</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <img src="/3.png" alt="Project 3 screenshot" />
+            <h3>Weather web app</h3>
+            <p>
+              Fetching from weather api to get live details of the particular
+              location.
+            </p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JS</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <img src="/4.png" alt="Project 4 screenshot" />
+            <h3>Landing Page</h3>
+            <p>A demo landing page.</p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <img src="/5.png" alt="Project 5 screenshot" />
+            <h3>Countdown Timer</h3>
+            <p>Timer with progress bar.</p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JS</span>
+            </div>
+          </div>
+          <div class="project-card">
+            <img src="/6.png" alt="Project 6 screenshot" />
+            <h3>Number guessing game</h3>
+            <p>A simple game.</p>
+            <div class="tags">
+              <span class="tag">HTML</span>
+              <span class="tag">CSS</span>
+              <span class="tag">JS</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact">
+        <h2>Get In Touch</h2>
+        <form id="contact-form">
+          <label for="name" class="sr-only">Your Name</label>
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Your Name"
+            required
+          />
+          <label for="email" class="sr-only">Your Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            placeholder="Your Email"
+            required
+          />
+          <label for="message" class="sr-only">Your Message</label>
+          <textarea
+            id="message"
+            name="message"
+            placeholder="Your Message"
+            required
+            rows="5"
+          ></textarea>
+          <button type="submit">Send Message</button>
+        </form>
+      </section>
+    </main>
+
+    <footer>
+      <p>&copy; 2024 {abhi}. All rights reserved.</p>
+    </footer>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const burger = document.querySelector(".burger");
+        const nav = document.querySelector(".nav-links");
+        const navLinks = document.querySelectorAll(".nav-links li");
+        const sections = document.querySelectorAll("section");
+
+        burger.addEventListener("click", () => {
+          // Toggle Nav
+          nav.classList.toggle("nav-active");
+
+          // Animate Links
+          navLinks.forEach((link, index) => {
+            if (link.style.animation) {
+              link.style.animation = "";
+            } else {
+              link.style.animation = `navLinkFade 0.5s ease forwards ${
+                index / 7 + 0.3
+              }s`;
+            }
+          });
+
+          // Burger Animation
+          burger.classList.toggle("toggle");
+
+          // Toggle aria-expanded
+          const expanded =
+            burger.getAttribute("aria-expanded") === "true" || false;
+          burger.setAttribute("aria-expanded", !expanded);
+        });
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+          anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            nav.classList.remove("nav-active");
+            burger.classList.remove("toggle");
+            document.querySelector(this.getAttribute("href")).scrollIntoView({
+              behavior: "smooth",
+            });
+          });
+        });
+
+        // Form submission
+        const form = document.getElementById("contact-form");
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          // Here you would typically send the form data to a server
+          // For this example, we'll just log it to the console
+          const formData = new FormData(form);
+          console.log(
+            "Form submitted with data:",
+            Object.fromEntries(formData)
+          );
+          form.reset();
+          alert("Thank you for your message! I'll get back to you soon.");
+        });
+
+        // Intersection Observer for section animations
+        const sectionObserver = new IntersectionObserver(
+          (entries, observer) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+
+        sections.forEach((section) => {
+          sectionObserver.observe(section);
+        });
+
+        // Random color theme changer
+        const changeColorTheme = () => {
+          const hue = Math.floor(Math.random() * 360);
+          document.documentElement.style.setProperty(
+            "--primary-color",
+            `hsl(${hue}, 70%, 50%)`
+          );
+          document.documentElement.style.setProperty(
+            "--secondary-color",
+            `hsl(${(hue + 120) % 360}, 70%, 50%)`
+          );
+          document.documentElement.style.setProperty(
+            "--accent-color",
+            `hsl(${(hue + 240) % 360}, 70%, 50%)`
+          );
+        };
+
+        // Change color theme every 30 seconds
+        setInterval(changeColorTheme, 30000);
+      });
+    </script>
+  </body>
+</html>
